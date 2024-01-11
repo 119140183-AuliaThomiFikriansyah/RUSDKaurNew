@@ -34,13 +34,37 @@ const Izin = () => {
     setTanggalAkhir(endDate);
   };
 
-  const HandleKirim = screen => {
-    console.log(keperluanIzin);
-    console.log(tanggalAwal);
-    console.log(tanggalAkhir);
-    console.log(uploadfoto);
-    console.log(deskripsi);
-    navigation.navigate('Menu');
+  const HandleKirim = async (e) => {
+        e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("keperluan", keperluanIzin);
+    formData.append("tanggalawal", tanggalAwal);
+    formData.append("tanggalakhir", tanggalAkhir);
+    formData.append("foto", uploadfoto);
+    formData.append("kategori", "izin");
+    formData.append("deskripsi", deskripsi);
+    await axios
+      .post(`http://127.0.0.1:8000/api/izin`, formData)
+      .then(({ data }) => {
+        Swal.fire({
+          icon: "success",
+          text: "silahkan cek email anda untuk melakukan verifikasi akun anda",
+        });
+        navigate("/Menu");
+      })
+      .catch(({ response }) => {
+        if (response.status === 422) {
+          setValidationError(response.data.errors);
+
+          console.log("error");
+        } else {
+          Swal.fire({
+            text: response.data.message,
+            icon: "error",
+          });
+        }
+      });
   };
 
   return (
