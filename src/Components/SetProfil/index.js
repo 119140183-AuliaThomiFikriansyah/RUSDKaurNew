@@ -6,12 +6,21 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
+import React, { useEffect, useState } from 'react';
 
 import {useNavigation} from '@react-navigation/native';
 
 import {Colors} from '../../Assets';
 
 const SetProfil = () => {
+  const [profil, setProfil] = useState([]);
+  useEffect(() => {
+    fetch("http://127.0.0.1:8000/api/user")
+      .then((res) => res.json())
+      .then((result) => {
+        setProfil(result);
+      });
+  }, []);
   const navigation = useNavigation();
 
   const HandleGoTo = screen => {
@@ -22,6 +31,7 @@ const SetProfil = () => {
     navigation.navigate('Login');
   };
   return (
+    
     <SafeAreaView style={styles.container}>
       <View style={styles.TextInformasi}>
         <Text
@@ -33,26 +43,26 @@ const SetProfil = () => {
           Informasi Akun
         </Text>
       </View>
+    {news.map((item, index) => (
       <View style={{marginTop: windowWidth * 0.025}}>
         <View style={styles.view}>
           <Text style={styles.TextTetap}>Nama</Text>
-          <Text style={styles.TextDinamis}>Aulia Thomi Fikriansyah</Text>
+          <Text style={styles.TextDinamis}>{item.nama}</Text>
         </View>
         <View style={styles.view}>
           <Text style={styles.TextTetap}>Nomer Telephon</Text>
-          <Text style={styles.TextDinamis}>085764686463</Text>
+          <Text style={styles.TextDinamis}>{item.no_hp}</Text>
         </View>
         <View style={styles.view}>
           <Text style={styles.TextTetap}>Email</Text>
-          <Text style={styles.TextDinamis}>Tomyfikriansyah18@gmail.com</Text>
+          <Text style={styles.TextDinamis}>{item.email}</Text>
         </View>
         <View style={styles.view}>
           <Text style={styles.TextTetap}>Alamat</Text>
-          <Text style={styles.TextDinamis}>
-            Jl. Trans Sumatera Palembapang, Kalianda, Lampung Selatan, Lampung
-          </Text>
+          <Text style={styles.TextDinamis}>{item.alamat}</Text>
         </View>
       </View>
+    ))}
     </SafeAreaView>
   );
 };
