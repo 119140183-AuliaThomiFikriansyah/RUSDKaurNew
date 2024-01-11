@@ -16,7 +16,7 @@ import {SetProfil} from '../../../Components';
 const Profil = () => {
   const [profil, setProfil] = useState([]);
   useEffect(() => {
-    fetch("http://192.168.18.9:8000/api/news")
+    fetch("http://192.168.18.9:8000/api/user")
       .then((res) => res.json())
       .then((result) => {
         setProfil(result);
