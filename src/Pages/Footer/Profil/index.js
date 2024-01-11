@@ -7,27 +7,38 @@ import {
   Image,
   Dimensions,
 } from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {BgProfil, Colors, IconProfil} from '../../../Assets';
 import {SetProfil} from '../../../Components';
 
+
 const Profil = () => {
+  const [profil, setProfil] = useState([]);
+  useEffect(() => {
+    fetch("http://192.168.18.9:8000/api/news")
+      .then((res) => res.json())
+      .then((result) => {
+        setProfil(result);
+      });
+  }, []);
   return (
-    <SafeAreaView style={styles.Container}>
-      <ImageBackground source={BgProfil} style={styles.Bg}>
-        <View style={styles.Profil}>
-          <Image source={IconProfil} />
-          <View style={styles.View}>
-            <Text style={styles.Text1}>Aulia Thomi Fikriansyah</Text>
-            <Text style={styles.Text2}>119140183</Text>
-          </View>
-        </View>
-      </ImageBackground>
-      <SetProfil />
-    </SafeAreaView>
-  );
-};
+    {news.map((item, index) => (
+          <SafeAreaView style={styles.Container}>
+            <ImageBackground source={BgProfil} style={styles.Bg}>
+              <View style={styles.Profil}>
+                <Image source={IconProfil} />
+                <View style={styles.View}>
+                  <Text style={styles.Text1}>{item.nama}</Text>
+                  <Text style={styles.Text2}>{item.NIP}</Text>
+                </View>
+              </View>
+            </ImageBackground>
+        ))}
+            <SetProfil />
+          </SafeAreaView>
+        );
+      };
 
 export default Profil;
 
